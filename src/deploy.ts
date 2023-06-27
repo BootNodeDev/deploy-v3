@@ -17,6 +17,7 @@ import { DEPLOY_V3_STAKER } from './steps/deploy-v3-staker'
 import { DEPLOY_V3_SWAP_ROUTER_02 } from './steps/deploy-v3-swap-router-02'
 import { TRANSFER_PROXY_ADMIN } from './steps/transfer-proxy-admin'
 import { TRANSFER_V3_CORE_FACTORY_OWNER } from './steps/transfer-v3-core-factory-owner'
+import { Wallet as ZkSyncWallet } from 'zksync-web3'
 
 const MIGRATION_STEPS: MigrationStep[] = [
   // must come first, for address calculations
@@ -39,6 +40,7 @@ const MIGRATION_STEPS: MigrationStep[] = [
 
 export default function deploy({
   signer,
+  useZkSync,
   gasPrice: numberGasPrice,
   initialState,
   onStateChange,
@@ -47,7 +49,8 @@ export default function deploy({
   v2CoreFactoryAddress,
   ownerAddress,
 }: {
-  signer: Signer
+  signer: Signer | ZkSyncWallet
+  useZkSync: boolean
   gasPrice: number | undefined
   weth9Address: string
   nativeCurrencyLabelBytes: string
@@ -61,7 +64,7 @@ export default function deploy({
 
   return migrate({
     steps: MIGRATION_STEPS,
-    config: { gasPrice, signer, weth9Address, nativeCurrencyLabelBytes, v2CoreFactoryAddress, ownerAddress },
+    config: { gasPrice, useZkSync, signer, weth9Address, nativeCurrencyLabelBytes, v2CoreFactoryAddress, ownerAddress },
     initialState,
     onStateChange,
   })

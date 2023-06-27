@@ -9,6 +9,8 @@ import { MigrationState } from './src/migrations'
 import { asciiStringToBytes32 } from './src/util/asciiStringToBytes32'
 import { version } from './package.json'
 
+const TIMEOUT_CONFIRMATIONS = /* 15 minutes */ 1000 * 60 * 15
+
 program
   .requiredOption('-pk, --private-key <string>', 'Private key used to deploy all contracts')
   .requiredOption('-j, --json-rpc <url>', 'JSON RPC URL where the program should be deployed')
@@ -113,8 +115,10 @@ const onStateChange = async (newState: MigrationState): Promise<void> => {
 async function run() {
   let step = 1
   const results = []
+
   const generator = deploy({
     signer: wallet,
+    useZkSync: false,
     gasPrice,
     nativeCurrencyLabelBytes,
     v2CoreFactoryAddress,
@@ -133,7 +137,7 @@ async function run() {
       result.map(
         (stepResult): Promise<TransactionReceipt | true> => {
           if (stepResult.hash) {
-            return wallet.provider.waitForTransaction(stepResult.hash, confirmations, /* 15 minutes */ 1000 * 60 * 15)
+            return wallet.provider.waitForTransaction(stepResult.hash, confirmations, TIMEOUT_CONFIRMATIONS)
           } else {
             return Promise.resolve(true)
           }

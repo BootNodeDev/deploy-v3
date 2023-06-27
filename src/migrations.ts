@@ -1,6 +1,7 @@
 import { Signer } from '@ethersproject/abstract-signer'
 import { BigNumber } from '@ethersproject/bignumber'
 import { GenericMigrationStep } from './migrate'
+import { Wallet as ZkSyncWallet } from 'zksync-web3'
 
 export interface MigrationState {
   readonly v3CoreFactoryAddress?: string
@@ -20,7 +21,8 @@ export interface MigrationState {
 export type StepOutput = { message: string; hash?: string; address?: string }
 
 export type MigrationConfig = {
-  signer: Signer
+  signer: Signer | ZkSyncWallet
+  useZkSync: boolean
   gasPrice: BigNumber | undefined
   weth9Address: string
   nativeCurrencyLabelBytes: string

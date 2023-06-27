@@ -1,8 +1,9 @@
 import { createDraft, current, Draft } from 'immer'
+import { Objectish } from 'immer/dist/internal'
 
 export type GenericMigrationStep<S, C, O> = (state: Draft<S>, config: C) => Promise<O>
 
-export async function* migrate<S, C, O>({
+export async function* migrate<S extends Objectish, C, O>({
   onStateChange,
   initialState,
   config,
