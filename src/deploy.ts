@@ -11,7 +11,7 @@ import { DEPLOY_PROXY_ADMIN } from './steps/deploy-proxy-admin'
 import { DEPLOY_QUOTER_V2 } from './steps/deploy-quoter-v2'
 import { DEPLOY_TICK_LENS } from './steps/deploy-tick-lens'
 import { DEPLOY_TRANSPARENT_PROXY_DESCRIPTOR } from './steps/deploy-transparent-proxy-descriptor'
-import { DEPLOY_V3_CORE_FACTORY } from './steps/deploy-v3-core-factory'
+import { DEPLOY_V3_CORE_FACTORY, ZK_DEPLOY_V3_CORE_FACTORY } from './steps/deploy-v3-core-factory'
 import { DEPLOY_V3_MIGRATOR } from './steps/deploy-v3-migrator'
 import { DEPLOY_V3_STAKER } from './steps/deploy-v3-staker'
 import { DEPLOY_V3_SWAP_ROUTER_02 } from './steps/deploy-v3-swap-router-02'
@@ -38,6 +38,25 @@ const MIGRATION_STEPS: MigrationStep[] = [
   TRANSFER_PROXY_ADMIN,
 ]
 
+const ZK_MIGRATION_STEPS: MigrationStep[] = [
+  // must come first, for address calculations
+  ZK_DEPLOY_V3_CORE_FACTORY,
+  // ADD_1BP_FEE_TIER,
+  // DEPLOY_MULTICALL2,
+  // DEPLOY_PROXY_ADMIN,
+  // DEPLOY_TICK_LENS,
+  // DEPLOY_NFT_DESCRIPTOR_LIBRARY_V1_3_0,
+  // DEPLOY_NFT_POSITION_DESCRIPTOR_V1_3_0,
+  // DEPLOY_TRANSPARENT_PROXY_DESCRIPTOR,
+  // DEPLOY_NONFUNGIBLE_POSITION_MANAGER,
+  // DEPLOY_V3_MIGRATOR,
+  // TRANSFER_V3_CORE_FACTORY_OWNER,
+  // DEPLOY_V3_STAKER,
+  // DEPLOY_QUOTER_V2,
+  // DEPLOY_V3_SWAP_ROUTER_02,
+  // TRANSFER_PROXY_ADMIN,
+]
+
 export default function deploy({
   signer,
   useZkSync,
@@ -62,8 +81,9 @@ export default function deploy({
   const gasPrice =
     typeof numberGasPrice === 'number' ? BigNumber.from(numberGasPrice).mul(BigNumber.from(10).pow(9)) : undefined // convert to wei
 
+  console.log({ useZkSync })
   return migrate({
-    steps: MIGRATION_STEPS,
+    steps: useZkSync ? ZK_MIGRATION_STEPS : MIGRATION_STEPS,
     config: { gasPrice, useZkSync, signer, weth9Address, nativeCurrencyLabelBytes, v2CoreFactoryAddress, ownerAddress },
     initialState,
     onStateChange,

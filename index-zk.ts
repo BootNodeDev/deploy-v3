@@ -67,6 +67,7 @@ async function run() {
   let step = 1
   const results = []
 
+  console.log({ useZkSync })
   const generator = deploy({
     signer: wallet,
     useZkSync,

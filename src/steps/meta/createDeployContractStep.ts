@@ -38,6 +38,7 @@ export default function createDeployContractStep({
       const constructorArgs: ConstructorArgs = computeArguments ? computeArguments(state, config) : []
 
       let contract: Contract | ZkContract
+      console.log({ useZkSync })
       if (!useZkSync) {
         console.log(`normal deploy ${contractName}`)
 

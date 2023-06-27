@@ -1,4 +1,8 @@
 private/
+artifacts/
+artifacts-zk/
+cache/
+cache-zk/
 
 # Logs
 logs

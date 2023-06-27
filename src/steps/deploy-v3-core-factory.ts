@@ -5,3 +5,9 @@ export const DEPLOY_V3_CORE_FACTORY = createDeployContractStep({
   key: 'v3CoreFactoryAddress',
   artifact: UniswapV3Factory,
 })
+
+export const ZK_DEPLOY_V3_CORE_FACTORY = createDeployContractStep({
+  key: 'v3CoreFactoryAddress',
+  artifact: UniswapV3Factory,
+  useZkSync: true,
+})
